@@ -1,3 +1,15 @@
+locals {
+    user_data = <<-EOT
+    mkdir /home/ec2-user/log
+    yum update -y &> /home/ec2-user/log
+    yum install -y httpd &>> /home/ec2-user/log
+    systemctl start httpd &>> /home/ec2-user/log
+    system enable httpd &>> /home/ec2-user/log
+    echo "<center><h1>Instance whith hostname: HOSTNAME</h1></center>" > /var/www/html/index.txt 2>> /home/ec2-user/log
+    sed "s/HOSTNAME/$HOSTNAME/" /var/www/html/index.txt > /var/www/html/index.html 2>> /home/ec2-user/log
+    EOT
+}
+
 module "network" {
     source = "../../modules/network"
 
@@ -17,5 +29,5 @@ module "EC2" {
     key_pair_name = "Frankfurt-key"
     subnet_id     = module.network.public_subnet_id
     sg_id         = [module.network.sg_id]
-    user_data     = "~/aws-cli-run-instances"
+    user_data     = "./user_data/aws-cli-run-instances"
 }

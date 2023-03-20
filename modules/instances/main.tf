@@ -4,7 +4,8 @@ resource "aws_instance" "instance" {
   key_name                    = var.key_pair_name
   subnet_id                   = var.subnet_id
   security_groups             = var.sg_id
-  user_data                   = var.user_data
+  user_data                   = file(var.user_data)
+  user_data_replace_on_change = true
   associate_public_ip_address = true
 
   tags = {
