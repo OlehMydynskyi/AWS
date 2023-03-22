@@ -6,11 +6,10 @@ variable "instance_type" {
     default = "t2.micro"
 }
 
-variable "inst_name" {
-    description = "Instanse`s tag value for key 'NAME'"
+variable "subnet_ids" {
+    description = "Subnet ids for instances"
+    type        = list(string) 
 }
-
-variable "subnet_id" {}
 
 variable "sg_id" {}
 
