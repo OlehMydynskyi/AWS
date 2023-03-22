@@ -21,16 +21,20 @@ resource "aws_route_table" "pub-rt" {
 }
 
 resource "aws_subnet" "public_subnet" {
+  count = length(var.pub_subnet_cidrs)
+
   vpc_id     = aws_vpc.vpc.id
-  cidr_block = var.pub_subnet_cidr
+  cidr_block = element(var.pub_subnet_cidrs, count.index)
 
   tags = {
-    Name = var.pub_subnet_name
+    Name = format("Public-subnet-%d", count.index + 1)
   }
 }
 
 resource "aws_route_table_association" "PublicRTassociation" {
-  subnet_id      = aws_subnet.public_subnet.id
+  count = length(var.pub_subnet_cidrs)
+
+  subnet_id      = element(aws_subnet.public_subnet[*].id, count.index)
   route_table_id = aws_route_table.pub-rt.id
 }
 

@@ -12,13 +12,9 @@ variable "vpc_name" {
     default     = "my-vpc"
 }
 
-variable "pub_subnet_name" {
-    description = "Public subnet`s tag value for key 'NAME'" 
-    default     = "my-public-subnet"
-}
-
-variable "pub_subnet_cidr" {
+variable "pub_subnet_cidrs" {
     description = "CIDR block for public subnet" 
+    type        = list(string)
 }
 
 variable "sg_name" {

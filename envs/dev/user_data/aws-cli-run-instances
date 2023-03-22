@@ -3,5 +3,5 @@ yum update -y
 yum install -y httpd
 systemctl start httpd
 systemctl enable httpd
-echo "<center><h1>Instance whith hostname: HOSTNAME</h1></center>" > /var/www/html/index.txt
+echo "<center><h1>Instance whith host name: HOSTNAME</h1></center>" > /var/www/html/index.txt
 sed "s/HOSTNAME/$HOSTNAME/" /var/www/html/index.txt > /var/www/html/index.html
