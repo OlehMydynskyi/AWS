@@ -21,3 +21,8 @@ variable "sg_name" {
     description = "Name of security group" 
     default     = "sg_subnet"
 }
+
+variable "azs" {
+    description = "AZs for subnets" 
+    type        = list(string)
+}
