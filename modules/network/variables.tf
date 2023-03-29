@@ -17,6 +17,11 @@ variable "pub_subnet_cidrs" {
     type        = list(string)
 }
 
+variable pr_subnet_cidrs {
+    description = "CIDR block for private subnet" 
+    type        = list(string)
+}
+
 variable "sg_name" {
     description = "Name of security group" 
     default     = "sg_subnet"
