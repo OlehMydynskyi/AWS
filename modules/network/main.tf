@@ -50,6 +50,7 @@ resource "aws_subnet" "private_subnet" {
 }
 
 resource "aws_eip" "nat_eip" {
+  count = length(var.pr_subnet_cidrs) != 0 ? 1 : 0
 
   tags = {
     Name = "Nat-eip"
@@ -57,7 +58,9 @@ resource "aws_eip" "nat_eip" {
 }
 
 resource "aws_nat_gateway" "private_ng" {
-  allocation_id = aws_eip.nat_eip.id
+  count = length(var.pr_subnet_cidrs) != 0 ? 1 : 0
+
+  allocation_id = aws_eip.nat_eip[0].id
   subnet_id     = aws_subnet.public_subnet[0].id
 
   tags = {
@@ -66,11 +69,13 @@ resource "aws_nat_gateway" "private_ng" {
 }
 
 resource "aws_route_table" "Private_rt" {
+  count = length(var.pr_subnet_cidrs) != 0 ? 1 : 0
+
   vpc_id = aws_vpc.vpc.id
 
   route {
     cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.private_ng.id
+    nat_gateway_id = aws_nat_gateway.private_ng[0].id
   }
 
   tags = {
@@ -82,7 +87,7 @@ resource "aws_route_table_association" "Private_rt_association" {
   count = length(var.pr_subnet_cidrs)
 
   subnet_id      = aws_subnet.private_subnet[count.index].id
-  route_table_id = aws_route_table.Private_rt.id
+  route_table_id = aws_route_table.Private_rt[0].id
 }
 
 resource "aws_default_security_group" "sg" {
